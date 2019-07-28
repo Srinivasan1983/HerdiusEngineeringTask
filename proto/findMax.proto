@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package proto;
+option go_package="proto";
+
+
+message FindMaximumNumRequest {
+    int32 num = 1;
+    string codestr = 2;
+    bytes signature = 3;
+    string clientpubkey = 4;
+}
+
+message FindMaximumNumResponse {
+    int32 num = 1;
+}
+
+
+service FindMaxNumService {
+    rpc FindMaximumNum(stream FindMaximumNumRequest) returns (stream FindMaximumNumResponse){};
+}
