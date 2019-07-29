@@ -9,9 +9,12 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"reflect"
 	"strconv"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func main() {
@@ -43,6 +46,19 @@ func findMaxNumber(c proto.FindMaxNumServiceClient) {
 		numbers := []int32{1, 5, 3, 6, 2, 20}
 		log.Printf("Input Stream: %v\n", numbers)
 		for idx, num := range numbers {
+			if num < 0 {
+				status.Errorf(
+					codes.InvalidArgument,
+					fmt.Sprintf("Received a negative number: %v", num),
+				)
+			}
+
+			if reflect.TypeOf(num).Kind() != reflect.Int32 {
+				status.Errorf(
+					codes.Unknown,
+					fmt.Sprintf("Received a unknown type: %v", num),
+				)
+			}
 			// fmt.Println(os.Getwd())
 			var privatefile = "clientpriv" + strconv.Itoa(idx)
 			var publicfile = "clientpub" + strconv.Itoa(idx)

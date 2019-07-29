@@ -9,9 +9,12 @@ import (
 	"io"
 	"log"
 	"net"
+	"reflect"
 	"strconv"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type server struct{}
@@ -73,6 +76,19 @@ func (*server) FindMaximumNum(stream proto.FindMaxNumService_FindMaximumNumServe
 			panic(err)
 		}
 		number := int32(i)
+		if number < 0 {
+			status.Errorf(
+				codes.InvalidArgument,
+				fmt.Sprintf("Received a negative number: %v", number),
+			)
+		}
+
+		if reflect.TypeOf(number).Kind() != reflect.Int32 {
+			status.Errorf(
+				codes.Unknown,
+				fmt.Sprintf("Received a unknown type: %v", number),
+			)
+		}
 
 		var opts rsa.PSSOptions
 		opts.SaltLength = rsa.PSSSaltLengthAuto
