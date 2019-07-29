@@ -14,18 +14,18 @@
 * And go run client/client.go for client.
 
     * Input - Output Client side
-        Starting to do a Client Streaming RPC...
-        2019/07/29 09:53:14 Input Stream: [1 5 3 6 2 20]
-        Received: 1
-        Received: 5
-        Received: 6
-        Received: 20
+        * Starting to do a Client Streaming RPC...
+        * 2019/07/29 09:53:14 Input Stream: [1 5 3 6 2 20]
+        * Received: 1
+        * Received: 5
+        * Received: 6
+        * Received: 20
 
     * Server Log Output 
-        Verify Signature success for: 1
-        Verify Signature success for: 5
-        Verify Signature success for: 6
-        Verify Signature success for: 20
+        * Verify Signature success for: 1
+        * Verify Signature success for: 5
+        * Verify Signature success for: 6
+        * Verify Signature success for: 20
 
 
 
