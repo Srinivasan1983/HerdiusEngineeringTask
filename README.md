@@ -30,5 +30,4 @@
 
 
 # ToDo
-* I want to handle TLS/SSL for encrpted client/server communication
 * I need to write test cases.

@@ -14,13 +14,20 @@ import (
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/status"
 )
 
 func main() {
 	config := proto.GetSettings()
 
-	cc, err := grpc.Dial(config.Address, grpc.WithInsecure())
+	certFile := "cert/ca.crt"
+	creds, sslErr := credentials.NewClientTLSFromFile(certFile, "")
+	if sslErr != nil {
+		log.Fatalf("Error while loading CA trust certificate %v", sslErr)
+	}
+	DialOpts := grpc.WithTransportCredentials(creds)
+	cc, err := grpc.Dial(config.Address, DialOpts)
 	if err != nil {
 		log.Fatalf("Could not connect: %v", err)
 	}

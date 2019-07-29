@@ -3,7 +3,7 @@ package proto
 import fmt "fmt"
 
 var (
-	ip      = "0.0.0.0"
+	ip      = "localhost"
 	port    = "50052"
 	address = fmt.Sprintf("%s:%s", ip, port)
 )

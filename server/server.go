@@ -14,6 +14,7 @@ import (
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/status"
 )
 
@@ -26,14 +27,24 @@ func main() {
 	lis, err := net.Listen("tcp", config.Address)
 	if err != nil {
 		log.Fatalf("Failed to listen: %s", config.Address)
+	} else {
+		fmt.Printf("Server Started: %v\n", config.Address)
 	}
 
 	var privatefile = "clientpriv"
 	var publicfile = "clientpub"
-	fmt.Println("\n", privatefile, publicfile)
+
 	trust.GenerateRsaKeyPairIfNotExist(privatefile, publicfile, true)
 
-	s := grpc.NewServer()
+	certFile := "cert/server.crt"
+	keyFile := "cert/server.pem"
+	creds, sslErr := credentials.NewServerTLSFromFile(certFile, keyFile)
+	if sslErr != nil {
+		log.Fatalf("Faild loading certificates %v\n", sslErr)
+		return
+	}
+	serverOption := grpc.Creds(creds)
+	s := grpc.NewServer(serverOption)
 
 	proto.RegisterFindMaxNumServiceServer(s, &server{})
 	if err := s.Serve(lis); err != nil {
